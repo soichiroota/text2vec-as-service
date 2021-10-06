@@ -1,27 +1,28 @@
-import os
 import json
+import os
+from typing import Any
 
-import responder
-from text_vectorian import SentencePieceVectorian
-from text_vectorian import Char2VecVectorian
 import numpy as np
-
+import responder
+from text_vectorian import Char2VecVectorian, SentencePieceVectorian
 
 env = os.environ
-DEBUG = env['DEBUG'] in ['1', 'True', 'true']
-MODEL = env['MODEL']
+DEBUG = env["DEBUG"] in ["1", "True", "true"]
+MODEL = env["MODEL"]
 
 api = responder.API(debug=DEBUG)
-vectorian = SentencePieceVectorian() if MODEL == 'sentence-piece' else Char2VecVectorian()
+vectorian = (
+    SentencePieceVectorian() if MODEL == "sentence-piece" else Char2VecVectorian()
+)
 
 
-def get_emb(text):
+def get_emb(text: str) -> Any:
     vectors = vectorian.fit(text).vectors
     return np.mean(vectors, axis=0).tolist()
 
 
 @api.route("/")
-async def encode(req, resp):
+async def encode(req: Any, resp: Any) -> None:
     body = await req.text
     texts = json.loads(body)
     emb_list = [get_emb(text) for text in texts]
