@@ -1,4 +1,4 @@
 pysen[lint]==0.9.1
 responder==2.0.5
-tensorflow-cpu==2.1.0
+tensorflow-cpu==2.7.2
 text-vectorian==0.2.0
